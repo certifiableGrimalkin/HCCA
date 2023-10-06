@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "80xeS5Q88OxZrB5L0df8Li//O8E8Evi5Wh2BwjZQch3J1DSJhZMctAUdff75PRt1ygNK15bgdLqvHq/RFK1Mkg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Grimalkin\\source\\repos\\HotChocoRing\\HotChocoRing\\HotChocolateCoffeeAlternative.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Grimalkin\\.nuget\\packages\\pathoschild.stardew.modbuildconfig\\4.1.1\\pathoschild.stardew.modbuildconfig.4.1.1.nupkg.sha512"
+  ],
+  "logs": []
+}
