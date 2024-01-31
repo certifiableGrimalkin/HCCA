@@ -61,13 +61,11 @@ namespace HotChocolateCoffeeAlternative
         internal class ObjectPatches
         {
             private static IMonitor Monitor;
-            private static int TheBean;
 
             // call this method from your Entry class
-            internal static void Initialize(IMonitor monitor, int Bean)
+            internal static void Initialize(IMonitor monitor)
             {
                 Monitor = monitor;
-                TheBean = Bean;
             }
 
             // patches need to be static!
@@ -81,7 +79,7 @@ namespace HotChocolateCoffeeAlternative
                         return false;
                     }
                     StardewValley.Object object1 = dropInItem as StardewValley.Object;
-                    if ((bool)(NetFieldBase<bool, NetBool>)__instance.bigCraftable && !probe && object1 != null && __instance.heldObject.Value == null)
+                    if (__instance.bigCraftable.Value && !probe && object1 != null && __instance.heldObject.Value == null)
                         __instance.scale.X = 5f;
                     if (probe && __instance.MinutesUntilReady > 0)
                     {
@@ -90,11 +88,13 @@ namespace HotChocolateCoffeeAlternative
                     }
                     if (__instance.name.Equals("Seed Maker"))
                     {
-                        if (object1 != null && (int)(NetFieldBase<int, NetInt>)object1.parentSheetIndex == TheBean)
+                        if (object1 != null && object1.name.Equals("Cocoa Bean"))
+                        {
                             __result = false;
                             return false; // don't run original logic
+                        }
                     }
-                    return true; 
+                    return true;
                 }
                 catch (Exception ex)
                 {
@@ -114,7 +114,7 @@ namespace HotChocolateCoffeeAlternative
             //this.PFMRule.Sounds = new List<string> { "Ship", "bubbles" };
             //this.PFMRule.PlacingAnimation = PlacingAnimation.Bubbles;
             //this.PFMRule.PlacingAnimationColorName = "Brown";
-            this.PMFApi.AddContentPack(Path.Combine(Helper.DirectoryPath,"assets", "PMF"));
+            this.PMFApi.AddContentPack(Path.Combine(Helper.DirectoryPath, "assets", "PMF"));
             //ProducerController.AddProducerItems(this.PFMRule);
             //ProducerController.AddProducerItems(PFMRule2);
         }
@@ -138,7 +138,7 @@ namespace HotChocolateCoffeeAlternative
 
             var harmony = new Harmony(this.ModManifest.UniqueID);
 
-            ObjectPatches.Initialize(this.Monitor, this.JsonAssets.GetObjectId("Cocoa Bean"));
+            ObjectPatches.Initialize(this.Monitor);
 
             // example patch, you'll need to edit this for your patch
             harmony.Patch(
