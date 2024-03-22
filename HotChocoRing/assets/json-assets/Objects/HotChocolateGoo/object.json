@@ -2,7 +2,7 @@
 	"Name": "Hot Chocolate Goo",
 	"Price": 600,
 	"Description": "A thick, chocolaty, gooey drink, that'll keep warm in the coldest winter.",
-	"Category": "Cooking",
+	"Category": "Crafting",
 	"Edibility": 20,
 	"EdibleIsDrink": true,
 	"EdibleBuffs": {
@@ -28,14 +28,14 @@
 				],
 			"IsDefault": false,
 			"CanPurchase": true,
-			"PurchaseFrom": "Gus",
+			"PurchaseFrom": "Saloon",
 			"PurchasePrice": 10000,
 			"PurchaseRequirements": [
 				"z spring", "z summer", "y 2"
 			]
 	},
 	"CanPurchase": true,
-	"PurchaseFrom": "Gus",
+	"PurchaseFrom": "Saloon",
 	"PurchasePrice": 1200,
 	"PurchaseRequirements": [
 		"z spring", "z summer", "y 2"

@@ -6,14 +6,9 @@ using SpaceShared.APIs;
 using System;
 using System.IO;
 //using ProducerFrameworkMod.Controllers;
-using System.Runtime.CompilerServices;
 //using ProducerFrameworkMod.ContentPack;
-using System.Collections.Generic;
 using ProducerFrameworkMod.Api;
 using HarmonyLib;
-using Netcode;
-using StardewValley.Locations;
-using StardewValley.Objects;
 
 // REMEMBER THAT THERE'S TWO ADDITIONAL PARTS OF THIS MOD [MFM] and [CP].
 // REMEMBER TO ALWAYS DELETE THE PMF.dll from the file.
@@ -35,15 +30,12 @@ namespace HotChocolateCoffeeAlternative
 
         private IProducerFrameworkModApi PMFApi;
 
-        //private ProducerRule PFMRule = new ProducerRule();
-        //private ProducerRule PFMRule2 = new ProducerRule();
-
 
         /// <summary>The item ID for the Ring of Wide Nets.</summary>
-        public int RingHotCocoa => this.JsonAssets.GetObjectId("Hot Cocoa Ring");
-        public int HotChoc => this.JsonAssets.GetObjectId("Hot Chocolate");
-        public int HotGoo => this.JsonAssets.GetObjectId("Hot Chocolate Goo");
-        public int CocoaBean => this.JsonAssets.GetObjectId("Cocoa Bean");
+        public string RingHotCocoa => this.JsonAssets.GetObjectId("Hot Cocoa Ring");
+        public string HotChoc => this.JsonAssets.GetObjectId("Hot Chocolate");
+        public string HotGoo => this.JsonAssets.GetObjectId("Hot Chocolate Goo");
+        public string CocoaBean => this.JsonAssets.GetObjectId("Cocoa Bean");
 
 
         /*********
@@ -105,18 +97,7 @@ namespace HotChocolateCoffeeAlternative
         }
         private void GameLoop_SaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            //this.PFMRule.ProducerName = "Keg";
-            //this.PFMRule.InputIdentifier = "Wood";
-            //this.PFMRule.InputStack = 5;
-            //this.PFMRule.MinutesUntilReady = 120;
-            //this.PFMRule.SubtractTimeOfDay = false;
-            //this.PFMRule.OutputIdentifier = "Hardwood";
-            //this.PFMRule.Sounds = new List<string> { "Ship", "bubbles" };
-            //this.PFMRule.PlacingAnimation = PlacingAnimation.Bubbles;
-            //this.PFMRule.PlacingAnimationColorName = "Brown";
             this.PMFApi.AddContentPack(Path.Combine(Helper.DirectoryPath, "assets", "PMF"));
-            //ProducerController.AddProducerItems(this.PFMRule);
-            //ProducerController.AddProducerItems(PFMRule2);
         }
 
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
@@ -132,9 +113,12 @@ namespace HotChocolateCoffeeAlternative
             // register rings with Json Assets
             this.JsonAssets = this.Helper.ModRegistry.GetApi<IJsonAssetsApi>("spacechase0.JsonAssets");
             if (this.JsonAssets != null)
+            {
                 this.JsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
+                this.Monitor.Log("HCCA json-assets loaded.", LogLevel.Info);
+            }
             else
-                this.Monitor.Log("Couldn't get the Json Assets API, so the new rings won't be available.", LogLevel.Error);
+                this.Monitor.Log("Couldn't get the Json Assets API, so the new items won't be available.", LogLevel.Error);
 
             var harmony = new Harmony(this.ModManifest.UniqueID);
 
@@ -145,7 +129,6 @@ namespace HotChocolateCoffeeAlternative
                original: AccessTools.Method(typeof(StardewValley.Object), nameof(StardewValley.Object.performObjectDropInAction)),
                prefix: new HarmonyMethod(typeof(ObjectPatches), nameof(ObjectPatches.performObjectDropInAction_Prefix))
             );
-
 
 
         }
@@ -233,21 +216,21 @@ namespace HotChocolateCoffeeAlternative
 
         /// <summary>Get whether the player has any ring with the given ID equipped.</summary>
         /// <param name="id">The ring ID to match.</param>
-        public bool HasRingEquipped(int id)
+        public bool HasRingEquipped(string id)
         {
             return this.CountRingsEquipped(id) > 0;
         }
 
         /// <summary>Count the number of rings with the given ID equipped by the player.</summary>
         /// <param name="id">The ring ID to match.</param>
-        public int CountRingsEquipped(int id)
+        public int CountRingsEquipped(string id)
         {
             int count =
                 (Game1.player.leftRing.Value?.GetEffectsOfRingMultiplier(id) ?? 0)
                 + (Game1.player.rightRing.Value?.GetEffectsOfRingMultiplier(id) ?? 0);
 
             if (this.WearMoreRings != null)
-                count = Math.Max(count, this.WearMoreRings.CountEquippedRings(Game1.player, id));
+                count = Math.Max(count, this.WearMoreRings.CountEquippedRings(Game1.player, Int32.Parse(id)));
 
             return count;
         }

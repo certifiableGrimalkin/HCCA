@@ -20,7 +20,7 @@
 		},
 	"IsColored": false,
 	"CanPurchase": true,
-	"PurchaseFrom": "Gus",
+	"PurchaseFrom": "Saloon",
 	"PurchasePrice": 400,
 	"GiftTastes":
 		{
